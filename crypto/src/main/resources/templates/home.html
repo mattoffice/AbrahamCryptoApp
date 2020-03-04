@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Abe's Crypto App</title>
+</head>
+<body>
+
+<h1>Welcome to Abe's crypto app!</h1>
+<img th:src="@{/images/bitcoin.png}"/>
+
+<form method="POST" th:object="${query}">
+
+
+
+            <h3>Choose a currency:</h3>
+            <div th:each="currency : ${currencyNames}">
+                <input name="currency" type="checkbox" th:value="${currency}" />
+                <span th:text="${currency}">CURRENCY</span>
+                <br/>
+            </div>
+
+
+            <h3>Choose a flavour of crypto:</h3>
+            <div th:each="cryptoType : ${crypto}">
+            <input name="cryptoType" type="checkbox" th:value="${cryptoType}" />
+            <span th:text="${cryptoType}">CURRENCY</span>
+            <br/>
+            </div>
+
+
+
+            <h3>How much are you willing to pay for this crypto??! - Sorry, only hardcoded option right now...</h3>
+        <div>
+            <input name="amount" type="checkbox" th:value="${amount}" />
+            <span th:text="${amount}">AMOUNT</span>
+            <br/>
+        </div>
+
+
+
+        <br/>
+        <button>Get me the value of bitcoin!</button>
+
+
+
+
+</form>
+
+</body>
+</html>
