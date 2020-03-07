@@ -3,14 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Crypto Value</title>
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css" />
+    <script>
+
+        var price = "[[${btcPrice}]]";
+    </script>
+
+    <script type="text/javascript" src="/images/js/app.js"></script>
 </head>
 <body>
 
 <div>
+    <h3>CURRENT PRICE: </h3>
+    <h1 th:text="${btcPrice}"></h1>
+</div>
+<br/>
 
-<span th:text="${btcPrice}">HELLO</span>
-    <br/>
-
+<div>
+    <div id="connect-container" class="ui centered grid">
+        <div class="row">
+            <button id="connect" onclick="connect();" class="ui green button ">Connect to Coinbase</button>
+            <button id="disconnect" disabled="disabled" onclick="disconnect();" class="ui red button">Disconnect</button>
+        </div>
+        <div class="row">
+            <textarea id="message" style="width: 350px" class="ui input" placeholder="Message to Echo"></textarea>
+        </div>
+        <div class="row">
+            <p id="myPara">barbed wire</p>
+            <input type="checkbox" id="myPara1" value="BAT-USDC">
+            <input type="checkbox" id="myPara2" value="ETH-BTC">
+            <button id="echo" onclick="echo(document.getElementById('myPara1').value);" disabled="disabled" class="ui button">Get latest price for </button>
+        </div>
+    </div>
+    <div id="console-container" class="ui centered grid">
+        <h3>Logging</h3>
+        <div id="logging"></div>
+    </div>
 </div>
 
 
