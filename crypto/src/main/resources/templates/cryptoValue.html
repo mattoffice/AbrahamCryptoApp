@@ -4,19 +4,42 @@
     <meta charset="UTF-8">
     <title>Crypto Value</title>
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css" />
-    <script>
 
-        var price = "[[${btcPrice}]]";
-    </script>
+    <style>
 
-    <script type="text/javascript" src="/images/js/app.js"></script>
+    body {
+        background-image: url("/images/notre_dame.jpg");
+    }
+
+    h1 {
+    color: green;
+    }
+
+    h3 {
+    color: green;
+    }
+
+    div {
+    color: yellow;
+    }
+
+
+    </style>
+
+
+
+<!--    <script type="text/javascript" src="/js/app.js">-->
+<!--        var price = "[[${btcPrice}]]";-->
+<!--        console.log(price + "from second script tag");-->
+<!--    </script>-->
 </head>
 <body>
 
 <div>
-    <h3>CURRENT PRICE: </h3>
+    <h3>Price of <em th:text="${cryptoVal.cryptoType}"></em> in <em th:text="${cryptoVal.currency}"></em> as of your last query:</h3>
     <h1 th:text="${btcPrice}"></h1>
 </div>
+
 <br/>
 
 <div>
@@ -25,23 +48,136 @@
             <button id="connect" onclick="connect();" class="ui green button ">Connect to Coinbase</button>
             <button id="disconnect" disabled="disabled" onclick="disconnect();" class="ui red button">Disconnect</button>
         </div>
-        <div class="row">
-            <textarea id="message" style="width: 350px" class="ui input" placeholder="Message to Echo"></textarea>
-        </div>
-        <div class="row">
-            <p id="myPara">barbed wire</p>
-            <input type="checkbox" id="myPara1" value="BAT-USDC">
-            <input type="checkbox" id="myPara2" value="ETH-BTC">
-            <button id="echo" onclick="echo(document.getElementById('myPara1').value);" disabled="disabled" class="ui button">Get latest price for </button>
+        <div class="container">
+            <p id="myPara">Choose crypto to follow: </p><br/>
+            <input class="currencyCheckbox" type="checkbox" id="myPara1" value="BAT-USDC"><span>BAT-USDC</span>
+            <br/>
+            <br/>
+            <input class="currencyCheckbox" type="checkbox" id="myPara2" value="ETH-BTC"><span>ETH-BTC</span>
+            <br/>
+            <br/>
+            <input class="currencyCheckbox" type="checkbox" id="myPara3" value="BTC-GBP"><span>BTC-GBP</span>
+            <br/>
+            <br/>
+            <input class="currencyCheckbox" type="checkbox" id="myPara4" value="BTC-EUR"><span>BTC-EUR</span>
+            <br/>
+            <br/>
+            <input class="currencyCheckbox" type="checkbox" id="myPara5" value="BTC-USD"><span>BTC-USD</span>
+            <br/>
+            <br/>
+            <input class="currencyCheckbox" type="checkbox" id="myPara6" value="LINK-USDC"><span>LINK-USDC</span>
+            <br/>
+            <br/>
+            <button id="echo" onclick="echo(document.querySelector('.currencyCheckbox:checked').value);" disabled="disabled" class="ui button">Get latest price!</button>
+            <br/>
+            <br/>
         </div>
     </div>
     <div id="console-container" class="ui centered grid">
         <h3>Logging</h3>
         <div id="logging"></div>
     </div>
+    <br/>
+    <br>
+    <div>
+        <p id="testjs">Testing JS</p>
+    </div>
 </div>
-
-
-
 </body>
+
+
+<script>
+        var price = "[[${btcPrice}]]";
+        console.log(price + "from first script tag");
+
+        var ws = null;
+var btc_url = "wss://ws-feed-public.sandbox.pro.coinbase.com";
+
+function setConnected(connected) {
+    document.getElementById('connect').disabled = connected;
+    document.getElementById('disconnect').disabled = !connected;
+    document.getElementById('echo').disabled = !connected;
+    }
+
+function log(price, product_id) {
+        var console = document.getElementById('logging');
+        var p = document.createElement('p');
+        p.appendChild(document.createTextNode("Latest Price for " + product_id + " relative to mother Bitcoin: " + price));
+        console.appendChild(p);
+        while (console.childNodes.length > 12) {
+            console.removeChild(console.firstChild);
+        }
+        console.scrollTop = console.scrollHeight;
+    }
+
+function parseResponse(r) {
+    var json = JSON.parse(r);
+    console.log(json);
+    console.log(json.price);
+    if (json.price != undefined) {
+    log(json.price, json.product_id);
+    };
+}
+
+function connect() {
+
+console.log("Inside connect function");
+
+    ws = new WebSocket(btc_url);
+
+    ws.onopen =  function() {
+        setConnected(true);
+    }
+
+    ws.onmessage = function(event) {
+        parseResponse(event.data);
+    }
+
+    ws.onclose = function(event) {
+        setConnected(false);
+        log('Info: Closing connection.');
+    }
+}
+
+function disconnect() {
+    if (ws != null) {
+        ws.close();
+        ws = null;
+    }
+
+}
+
+function echo(p) {
+    console.log(p);
+    if (ws != null) {
+        var message = JSON.stringify({
+                                          "type": "subscribe",
+                                          "product_ids": [
+                                              "ETH-USD",
+                                              "ETH-EUR"
+                                          ],
+                                          "channels": [
+                                              "level2",
+                                              "heartbeat",
+                                              {
+                                                  "name": "ticker",
+                                                  "product_ids": [
+                                                      p,
+                                                      "ETH-USD"
+                                                  ]
+                                              }
+                                          ]
+                                     });
+        ws.send(message);
+    } else {
+        alert('Connection not established, please connect.');
+    }
+}
+
+ function testFunc(price) {
+    return price;
+}
+
+document.getElementById("testjs").innerHTML = testFunc(price);
+    </script>
 </html>

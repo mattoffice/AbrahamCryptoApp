@@ -4,15 +4,79 @@
     <meta charset="UTF-8">
     <title>JS Test</title>
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css" />
-    <script>
+<style>
 
-        var message = "[[${message}]]";
-    </script>
+    .test_div {
+    color: green;
+    }
+
+    .root_div {
+    color: green;
+    }
+
+    body {
+        background-image: url("/images/notre_dame.jpg");
+    }
+
+    h1 {
+    color: green;
+    }
+
+    h3 {
+    color: green;
+    }
+
+    div {
+    color: green;
+    }
+
+</style>
 </head>
 <body>
 
+<div id="root">React not rendering...
+</div>
+
+<script src="https://unpkg.com/react@16.8.4/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16.8.4/umd/react-dom.development.js"></script>
+
+<script>
+var message = "[[${message}]]";
+
+const App = () => {
+    return React.createElement(
+    "div", {}, React.createElement("h1", { className: "test_div" }, message), React.createElement("h1", { className: "test_div" }, message));
+};
+
+ReactDOM.render(App(), document.getElementById("root"));
+
+const Messi = React.createElement("h1", { id: "messi"}, "The greatest footballer known to man");
+const Braithwaite = React.createElement("h3", { id: "braithwaite" }, "A decent start");
+
+const barcaTeam = React.createElement("section", { id: "startingEleven" },
+React.createElement("h2", null, "Saturday's starting 11:"),
+React.createElement("ul", { className: "teamsheet" },
+React.createElement("li", null, "Ter Stegen"),
+React.createElement("li", null, "Alba"),
+React.createElement("li", null, "Pique"),
+React.createElement("li", null, "Lenglet"),
+React.createElement("li", null, "Semedo"),
+React.createElement("li", null, "Busquets"),
+React.createElement("li", null, "Rakitic"),
+React.createElement("li", null, "De Jong"),
+React.createElement("li", null, "Messi"),
+React.createElement("li", null, "Braithwaite"),
+React.createElement("li", null, "Griezmann")
+),
+React.createElement("p", { id: "conclusion" }, "Team was pretty poor overall"));
+
+ReactDOM.render([Messi, Braithwaite], document.getElementById("root"));
+ReactDOM.render(barcaTeam, document.getElementById("root"));
+
+</script>
+
 <div>
-Price=
+Placeholder til you take up mine
 <span th:text="${message}"></span>
 </div>
 

@@ -32,7 +32,17 @@ public class HomeController {
         );
 
         List<Crypto> cryptos = Arrays.asList(new Crypto("ETH", "ETHEREUM"),
-                new Crypto("BTC", "BITCOIN"));
+                new Crypto("BTC", "BITCOIN"),
+                new Crypto("LINK", "CHAINLINK"),
+                new Crypto("XTZ", "TEZOS"),
+                new Crypto("KNC", "KYBER NETWORK"),
+                new Crypto("LTC", "LITECOIN"),
+                new Crypto("XRP", "XRP"),
+                new Crypto("ALGO", "ALGORAND"),
+                new Crypto("OXT", "ORCHID PROTOCOL"),
+                new Crypto("REP", "AUGUR"),
+                new Crypto("BAT", "BASIC ATTENTION TOKEN"),
+                new Crypto("XLM", "STELLAR"));
 
         List<String> cryptoTypes = cryptos.stream().map(Crypto::getCryptoId).collect(Collectors.toList());
 
